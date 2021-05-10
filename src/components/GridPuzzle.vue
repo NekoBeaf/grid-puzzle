@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div @click="test">image</div>
+    <div @click="makePuzzle">image</div>
     <div id="container"></div>
     <div>
       cols:
@@ -35,6 +35,8 @@
           :h="item.h"
           :i="item.i"
           :key="item.i"
+          @moved="checkLayout"
+          @resized="checkLayout"
         >
           <img :src="item.image" />
         </grid-item>
@@ -73,7 +75,7 @@ export default {
     };
   },
   methods: {
-    async test() {
+    async makePuzzle() {
       const result = await imagesGenerator.generate(
         require("@/assets/img/default1.jpg"),
         this.cols,
@@ -97,6 +99,23 @@ export default {
       this.colNum = Number(this.cols);
       this.layout = gridGenerator.generate(this.cols, this.rows, this.divs);
       this.gridData = this.layout;
+    },
+    checkLayout() {
+      let judge = true;
+      this.layout.forEach((item) => {
+        const answer = this.answer.find((elem) => elem.image === item.image);
+        if (
+          item.x !== answer.x ||
+          item.y !== answer.y ||
+          item.w !== answer.w ||
+          item.h !== answer.h
+        ) {
+          judge = false;
+        }
+      });
+      if (judge) {
+        alert("Congratulations!!");
+      }
     },
   },
 };
