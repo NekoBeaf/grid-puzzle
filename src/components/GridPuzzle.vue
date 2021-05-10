@@ -4,15 +4,15 @@
     <div id="container"></div>
     <div>
       cols:
-      <input v-model="cols" placeholder="4" />
+      <input type="number" v-model="cols" placeholder="4" />
     </div>
     <div>
       rows:
-      <input v-model="rows" placeholder="4" />
+      <input type="number" v-model="rows" placeholder="4" />
     </div>
     <div>
       divs:
-      <input v-model="divs" placeholder="6" />
+      <input type="number" v-model="divs" placeholder="6" />
     </div>
     <div @click="generate">generate</div>
     <div class="grid">
@@ -36,7 +36,7 @@
           :i="item.i"
           :key="item.i"
         >
-          <img :src="item.image" class="piece" />
+          <img :src="item.image" />
         </grid-item>
       </grid-layout>
     </div>
@@ -69,6 +69,7 @@ export default {
         { x: 3, y: 0, w: 1, h: 1, i: "3", image: "" },
         { x: 0, y: 1, w: 1, h: 1, i: "4", image: "" },
       ],
+      answer: [],
     };
   },
   methods: {
@@ -79,12 +80,20 @@ export default {
         this.rows,
         this.gridData
       );
+      // 分割した画像のパスを追加
+      this.layout.forEach((item, index) => {
+        this.$set(item, "image", result[index]);
+      });
+      // 正解データを保存
+      this.answer = this.layout;
+      // 新しい分割で再生成
+      this.layout = gridGenerator.generate(this.cols, this.rows, this.divs);
       this.layout.forEach((item, index) => {
         this.$set(item, "image", result[index]);
       });
     },
     generate() {
-      // TODO
+      // TODO:validate
       this.colNum = Number(this.cols);
       this.layout = gridGenerator.generate(this.cols, this.rows, this.divs);
       this.gridData = this.layout;
@@ -101,10 +110,10 @@ export default {
 }
 .vue-grid-item {
   background: gray;
-  width: 100%;
 }
 img {
   padding: 1px;
   width: 100%;
+  height: 100%;
 }
 </style>
