@@ -38,7 +38,7 @@
           @moved="checkLayout"
           @resized="checkLayout"
         >
-          <img :src="item.image" />
+          <img :src="item.image" class="puzzle-piece" />
         </grid-item>
       </grid-layout>
     </div>
@@ -129,12 +129,11 @@ export default {
 .grid {
   width: 500px;
   margin: auto;
-  padding: 20px;
 }
 .vue-grid-item {
   background: gray;
 }
-img {
+.puzzle-piece {
   width: 100%;
   height: 100%;
 }

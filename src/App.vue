@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1 class="text-3xl">Grid Puzzle</h1>
     <grid-puzzle />
   </div>
 </template>
