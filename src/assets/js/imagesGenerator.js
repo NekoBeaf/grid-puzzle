@@ -1,7 +1,23 @@
-async function generate(path, cols, rows, gridData) {
+async function generate(path, cols, rows, gridData, maxSize) {
   let result = [];
+  let rowHeight = 0;
   try {
     const image = await loadImage(path);
+
+    let width = image.width;
+    let height = image.height;
+    // 幅チェック
+    if (width > maxSize.width) {
+      height = height * (maxSize.width / width);
+      width = maxSize.width;
+    }
+    // 高さチェック
+    if (height > maxSize.height) {
+      width = width * (maxSize.height / height);
+      height = maxSize.height;
+    }
+    // 一行の高さ
+    rowHeight = height / rows;
 
     const sprite = { width: image.width / cols, height: image.height / rows };
     let canvas = document.createElement("canvas");
@@ -25,14 +41,13 @@ async function generate(path, cols, rows, gridData) {
       var spriteElement = new Image();
       spriteElement.src = canvas.toDataURL();
 
-      //document.querySelector("#container").appendChild(spriteElement);
       result.push(spriteElement.src);
     });
   } catch (e) {
     console.log("onload error", e);
   }
 
-  return result;
+  return { images: result, rowHeight: rowHeight };
 }
 
 const loadImage = (src) => {

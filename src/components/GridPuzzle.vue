@@ -24,7 +24,7 @@
         :is-resizable="true"
         :is-mirrored="false"
         :vertical-compact="true"
-        :margin="[2, 2]"
+        :margin="[0, 0]"
         :use-css-transforms="true"
       >
         <grid-item
@@ -62,7 +62,7 @@ export default {
       rows: 4,
       divs: 6,
       colNum: 4,
-      rowHeight: 51.7,
+      rowHeight: 50,
       gridData: [],
       layout: [
         { x: 0, y: 0, w: 1, h: 1, i: "0", image: "" },
@@ -80,18 +80,22 @@ export default {
         require("@/assets/img/default1.jpg"),
         this.cols,
         this.rows,
-        this.gridData
+        this.gridData,
+        { width: 500, height: 500 }
       );
+      const images = result.images;
+      this.rowHeight = result.rowHeight;
+      console.log(this.rowHeight);
       // 分割した画像のパスを追加
       this.layout.forEach((item, index) => {
-        this.$set(item, "image", result[index]);
+        this.$set(item, "image", images[index]);
       });
       // 正解データを保存
       this.answer = this.layout;
       // 新しい分割で再生成
       this.layout = gridGenerator.generate(this.cols, this.rows, this.divs);
       this.layout.forEach((item, index) => {
-        this.$set(item, "image", result[index]);
+        this.$set(item, "image", images[index]);
       });
     },
     generate() {
@@ -131,7 +135,6 @@ export default {
   background: gray;
 }
 img {
-  padding: 1px;
   width: 100%;
   height: 100%;
 }
