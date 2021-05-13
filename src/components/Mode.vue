@@ -3,8 +3,11 @@
     <div
       v-for="mode in modes"
       :key="mode"
-      class="bg-gray-600 hover:bg-blue-700 text-white font-bold py-2 px-4 m-3 rounded cursor-pointer"
-      :class="{ 'bg-blue-700': isSelectedMode(mode) }"
+      class="bg-gray-600 text-white font-bold py-2 px-4 m-3 rounded"
+      :class="[
+        isSelectedMode(mode) ? 'bg-blue-700' : '',
+        status !== 'running' ? 'cursor-pointer hover:bg-blue-700' : '',
+      ]"
       @click="changeMode(mode)"
     >
       {{ mode }}
@@ -30,28 +33,35 @@
       <input
         class="shadow border rounded my-1 py-2 px-2 focus:outline-none"
         type="number"
+        min="1"
         v-model="custom.cols"
         placeholder="4"
       />
       <input
         class="shadow border rounded my-1 py-2 px-2 focus:outline-none"
         type="number"
+        min="1"
         v-model="custom.rows"
         placeholder="4"
       />
       <input
         class="shadow border rounded my-1 py-2 px-2 focus:outline-none"
         type="number"
+        min="1"
         v-model="custom.divs"
         placeholder="4"
       />
     </div>
     <div
-      class="bg-gray-600 hover:bg-blue-700 text-white font-bold
+      class="bg-gray-600 text-white font-bold
              py-2 px-4 m-3 rounded cursor-pointer"
-      @click="start"
+      :class="[
+        status === 'ready' ? 'bg-green-500 hover:bg-green-700' : '',
+        status === 'running' ? 'bg-red-500 hover:bg-red-700' : '',
+      ]"
+      @click="run"
     >
-      Start
+      {{ runButtonLabel }}
     </div>
   </div>
 </template>
@@ -81,6 +91,7 @@ export default {
   },
   data() {
     return {
+      status: "ready",
       modes: ["easy", "normal", "hard", "custom"],
       mode: "normal",
       customParams: ["cols", "rows", "divs"],
@@ -93,6 +104,9 @@ export default {
   },
   methods: {
     changeMode(mode) {
+      if (this.status === "running") {
+        return;
+      }
       this.mode = mode;
       if (MODE_PARAMS[this.mode] !== undefined) {
         this.cols = MODE_PARAMS[this.mode].cols;
@@ -110,12 +124,39 @@ export default {
       }
       return false;
     },
-    start() {
-      this.$emit("start", {
-        cols: Number(this.custom.cols),
-        rows: Number(this.custom.rows),
-        divs: Number(this.custom.divs),
-      });
+    run() {
+      if (this.status === "ready") {
+        this.status = "running";
+        let cols = this.custom.cols;
+        let rows = this.custom.cols;
+        let divs = this.custom.cols;
+        if (MODE_PARAMS[this.mode] !== undefined) {
+          cols = MODE_PARAMS[this.mode].cols;
+          rows = MODE_PARAMS[this.mode].rows;
+          divs = MODE_PARAMS[this.mode].divs;
+        }
+        this.$emit("start", {
+          cols: Number(cols),
+          rows: Number(rows),
+          divs: Number(divs),
+        });
+      } else if (this.status === "running") {
+        this.status = "ready";
+      }
+    },
+  },
+  computed: {
+    runButtonLabel() {
+      if (this.status === "running") {
+        return "Quit";
+      }
+      return "Start";
+    },
+    isReady() {
+      if (this.status === "ready") {
+        return true;
+      }
+      return false;
     },
   },
 };
