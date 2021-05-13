@@ -1,21 +1,6 @@
 <template>
   <div>
-    <div @click="makePuzzle">image</div>
-    <div id="container"></div>
-    <div>
-      cols:
-      <input type="number" v-model="cols" placeholder="4" />
-    </div>
-    <div>
-      rows:
-      <input type="number" v-model="rows" placeholder="4" />
-    </div>
-    <div>
-      divs:
-      <input type="number" v-model="divs" placeholder="6" />
-    </div>
-    <div @click="generate">generate</div>
-    <div class="grid">
+    <div class="imageView mx-auto pt-5">
       <grid-layout
         :layout.sync="layout"
         :col-num="colNum"
@@ -75,6 +60,16 @@ export default {
     };
   },
   methods: {
+    start(param) {
+      // TODO
+      this.colNum = param.cols;
+      this.cols = param.cols;
+      this.rows = param.rows;
+      this.divs = param.divs;
+      this.layout = gridGenerator.generate(param.cols, param.rows, param.divs);
+      this.gridData = this.layout;
+      this.makePuzzle();
+    },
     async makePuzzle() {
       const result = await imagesGenerator.generate(
         require("@/assets/img/default1.jpg"),
@@ -98,12 +93,6 @@ export default {
         this.$set(item, "image", images[index]);
       });
     },
-    generate() {
-      // TODO:validate
-      this.colNum = Number(this.cols);
-      this.layout = gridGenerator.generate(this.cols, this.rows, this.divs);
-      this.gridData = this.layout;
-    },
     checkLayout() {
       let judge = true;
       this.layout.forEach((item) => {
@@ -126,9 +115,8 @@ export default {
 </script>
 
 <style>
-.grid {
+.imageView {
   width: 500px;
-  margin: auto;
 }
 .vue-grid-item {
   background: gray;
