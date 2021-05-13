@@ -3,8 +3,8 @@
     <h1 class="text-3xl">Grid Puzzle</h1>
     <select-image />
     <div class="grid grid-cols-3">
-      <grid-puzzle ref="puzzle" class="col-span-2" />
-      <mode ref="mode" @start="start" />
+      <grid-puzzle ref="puzzle" @clear="clear" class="col-span-2" />
+      <mode ref="mode" @start="start" @quit="quit" />
     </div>
   </div>
 </template>
@@ -26,6 +26,13 @@ export default {
   methods: {
     start(param) {
       this.$refs.puzzle.start(param);
+    },
+    quit() {
+      this.$refs.puzzle.quit();
+    },
+    clear() {
+      this.$refs.puzzle.clear();
+      this.$refs.mode.clear();
     },
   },
 };

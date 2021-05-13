@@ -26,7 +26,7 @@
       </template>
     </div>
     -->
-    <div class="grid grid-cols-3 gap-x-1 mx-3">
+    <div v-if="mode === 'custom'" class="grid grid-cols-3 gap-x-1 mx-3">
       <div>cols</div>
       <div>rows</div>
       <div>divs</div>
@@ -36,6 +36,7 @@
         min="1"
         v-model="custom.cols"
         placeholder="4"
+        :disabled="status === 'running'"
       />
       <input
         class="shadow border rounded my-1 py-2 px-2 focus:outline-none"
@@ -43,6 +44,7 @@
         min="1"
         v-model="custom.rows"
         placeholder="4"
+        :disabled="status === 'running'"
       />
       <input
         class="shadow border rounded my-1 py-2 px-2 focus:outline-none"
@@ -50,6 +52,7 @@
         min="1"
         v-model="custom.divs"
         placeholder="4"
+        :disabled="status === 'running'"
       />
     </div>
     <div
@@ -86,9 +89,6 @@ const MODE_PARAMS = {
 };
 export default {
   name: "Mode",
-  created: function() {
-    console.log(MODE_PARAMS[this.mode]);
-  },
   data() {
     return {
       status: "ready",
@@ -142,7 +142,11 @@ export default {
         });
       } else if (this.status === "running") {
         this.status = "ready";
+        this.$emit("quit");
       }
+    },
+    clear() {
+      this.status = "ready";
     },
   },
   computed: {

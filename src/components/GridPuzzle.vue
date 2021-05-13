@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="imageView mx-auto pt-5">
+  <div class="imageView mx-auto pt-5">
+    <div v-if="isRunning">
       <grid-layout
         :layout.sync="layout"
         :col-num="colNum"
@@ -27,6 +27,9 @@
         </grid-item>
       </grid-layout>
     </div>
+    <div v-else>
+      <img :src="require('@/assets/img/default1.jpg')" />
+    </div>
   </div>
 </template>
 
@@ -43,6 +46,7 @@ export default {
   },
   data() {
     return {
+      isRunning: false,
       cols: 4,
       rows: 4,
       divs: 6,
@@ -62,6 +66,7 @@ export default {
   methods: {
     start(param) {
       // TODO
+      this.isRunning = true;
       this.colNum = param.cols;
       this.cols = param.cols;
       this.rows = param.rows;
@@ -69,6 +74,12 @@ export default {
       this.layout = gridGenerator.generate(param.cols, param.rows, param.divs);
       this.gridData = this.layout;
       this.makePuzzle();
+    },
+    quit() {
+      this.isRunning = false;
+    },
+    clear() {
+      this.isRunning = false;
     },
     async makePuzzle() {
       const result = await imagesGenerator.generate(
@@ -107,7 +118,7 @@ export default {
         }
       });
       if (judge) {
-        alert("Congratulations!!");
+        this.$emit("clear");
       }
     },
   },
