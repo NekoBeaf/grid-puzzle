@@ -1,5 +1,5 @@
 <template>
-  <div class="imageView mx-auto pt-5">
+  <div class="imageView mx-auto pt-5" :style="imageViewWidth">
     <div v-if="isRunning">
       <grid-layout
         :layout.sync="layout"
@@ -47,6 +47,7 @@ export default {
   data() {
     return {
       isRunning: false,
+      imageWidth: 500,
       cols: 4,
       rows: 4,
       divs: 6,
@@ -91,7 +92,7 @@ export default {
       );
       const images = result.images;
       this.rowHeight = result.rowHeight;
-      console.log(this.rowHeight);
+      this.imageWidth = result.width;
       // 分割した画像のパスを追加
       this.layout.forEach((item, index) => {
         this.$set(item, "image", images[index]);
@@ -122,12 +123,20 @@ export default {
       }
     },
   },
+  computed: {
+    imageViewWidth() {
+      return {
+        "--width": this.imageWidth + "px",
+      };
+    },
+  },
 };
 </script>
 
 <style>
 .imageView {
-  width: 500px;
+  --width: 500;
+  width: var(--width);
 }
 .vue-grid-item {
   background: gray;

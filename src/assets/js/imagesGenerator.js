@@ -1,6 +1,7 @@
 async function generate(path, cols, rows, gridData, maxSize) {
   let result = [];
   let rowHeight = 0;
+  let imageWidth = 0;
   try {
     const image = await loadImage(path);
 
@@ -18,6 +19,8 @@ async function generate(path, cols, rows, gridData, maxSize) {
     }
     // 一行の高さ
     rowHeight = height / rows;
+    // 画像全体の横幅
+    imageWidth = width;
 
     const sprite = { width: image.width / cols, height: image.height / rows };
     let canvas = document.createElement("canvas");
@@ -47,7 +50,7 @@ async function generate(path, cols, rows, gridData, maxSize) {
     console.log("onload error", e);
   }
 
-  return { images: result, rowHeight: rowHeight };
+  return { images: result, rowHeight: rowHeight, width: imageWidth };
 }
 
 const loadImage = (src) => {
