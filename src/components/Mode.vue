@@ -128,8 +128,8 @@ export default {
       if (this.status === "ready") {
         this.status = "running";
         let cols = this.custom.cols;
-        let rows = this.custom.cols;
-        let divs = this.custom.cols;
+        let rows = this.custom.rows;
+        let divs = this.custom.divs;
         if (MODE_PARAMS[this.mode] !== undefined) {
           cols = MODE_PARAMS[this.mode].cols;
           rows = MODE_PARAMS[this.mode].rows;

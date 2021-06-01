@@ -1,5 +1,8 @@
 <template>
-  <div class="imageView mx-auto pt-5" :style="imageViewWidth">
+  <div
+    class="imageView mx-auto pt-5"
+    :style="[imageViewWidth, imageViewHeight]"
+  >
     <div v-if="isRunning">
       <grid-layout
         :layout.sync="layout"
@@ -27,9 +30,7 @@
         </grid-item>
       </grid-layout>
     </div>
-    <div v-else>
-      <img :src="require('@/assets/img/default1.jpg')" />
-    </div>
+    <img v-else :src="image" class="mx-auto" />
   </div>
 </template>
 
@@ -46,8 +47,10 @@ export default {
   },
   data() {
     return {
+      image: require("@/assets/img/default1.jpg"),
       isRunning: false,
       imageWidth: 500,
+      imageHeight: 300,
       cols: 4,
       rows: 4,
       divs: 6,
@@ -65,8 +68,10 @@ export default {
     };
   },
   methods: {
+    setImage(image) {
+      this.image = image;
+    },
     start(param) {
-      // TODO
       this.isRunning = true;
       this.colNum = param.cols;
       this.cols = param.cols;
@@ -78,17 +83,19 @@ export default {
     },
     quit() {
       this.isRunning = false;
+      this.imageWidth = 500;
+      this.imageHeight = 300;
     },
     clear() {
-      this.isRunning = false;
+      this.quit();
     },
     async makePuzzle() {
       const result = await imagesGenerator.generate(
-        require("@/assets/img/default1.jpg"),
+        this.image,
         this.cols,
         this.rows,
         this.gridData,
-        { width: 500, height: 500 }
+        { width: 500, height: 300 }
       );
       const images = result.images;
       this.rowHeight = result.rowHeight;
@@ -129,6 +136,11 @@ export default {
         "--width": this.imageWidth + "px",
       };
     },
+    imageViewHeight() {
+      return {
+        "--height": this.imageHeight + "px",
+      };
+    },
   },
 };
 </script>
@@ -137,6 +149,8 @@ export default {
 .imageView {
   --width: 500;
   width: var(--width);
+  --height: 300;
+  height: var(--height);
 }
 .vue-grid-item {
   background: gray;
@@ -144,5 +158,10 @@ export default {
 .puzzle-piece {
   width: 100%;
   height: 100%;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
 }
 </style>
