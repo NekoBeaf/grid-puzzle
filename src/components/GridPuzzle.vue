@@ -72,7 +72,6 @@ export default {
       this.image = image;
     },
     start(param) {
-      this.isRunning = true;
       this.colNum = param.cols;
       this.cols = param.cols;
       this.rows = param.rows;
@@ -80,6 +79,7 @@ export default {
       this.layout = gridGenerator.generate(param.cols, param.rows, param.divs);
       this.gridData = this.layout;
       this.makePuzzle();
+      this.isRunning = true;
     },
     quit() {
       this.isRunning = false;

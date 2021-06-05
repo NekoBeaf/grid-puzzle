@@ -12,20 +12,6 @@
     >
       {{ mode }}
     </div>
-    <!--
-    <div class="grid grid-rows-2 grid-flow-col gap-x-1 mx-3">
-      <template v-for="param in customParams">
-        <div :key="param">{{ param }}</div>
-        <input
-          :key="param"
-          class="shadow border rounded my-1 py-2 px-2 focus:outline-none"
-          type="number"
-          v-model="custom[param]"
-          placeholder="4"
-        />
-      </template>
-    </div>
-    -->
     <div v-if="mode === 'custom'" class="grid grid-cols-3 gap-x-1 mx-3">
       <div>cols</div>
       <div>rows</div>
