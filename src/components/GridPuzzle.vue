@@ -23,8 +23,8 @@
           :h="item.h"
           :i="item.i"
           :key="item.i"
-          @moved="checkLayout"
-          @resized="checkLayout"
+          @moved="judge"
+          @resized="judge"
         >
           <img :src="item.image" class="puzzle-piece" />
         </grid-item>
@@ -106,11 +106,20 @@ export default {
       });
       // 正解データを保存
       this.answer = this.layout;
-      // 新しい分割で再生成
-      this.layout = gridGenerator.generate(this.cols, this.rows, this.divs);
-      this.layout.forEach((item, index) => {
-        this.$set(item, "image", images[index]);
-      });
+      let judge = true;
+      while (judge) {
+        // 新しい分割で再生成
+        this.layout = gridGenerator.generate(this.cols, this.rows, this.divs);
+        this.layout.forEach((item, index) => {
+          this.$set(item, "image", images[index]);
+        });
+        judge = this.checkLayout();
+      }
+    },
+    judge() {
+      if (this.checkLayout()) {
+        this.$emit("clear");
+      }
     },
     checkLayout() {
       let judge = true;
@@ -125,9 +134,7 @@ export default {
           judge = false;
         }
       });
-      if (judge) {
-        this.$emit("clear");
-      }
+      return judge;
     },
   },
   computed: {
