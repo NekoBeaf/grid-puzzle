@@ -152,16 +152,33 @@ export default {
   --height: 300;
   height: var(--height);
 }
-.vue-grid-item {
-  background: gray;
-}
 .puzzle-piece {
   width: 100%;
   height: 100%;
 }
-
 img {
   max-width: 100%;
   max-height: 100%;
+}
+/* Item */
+.vue-grid-item:hover {
+  background: lightgray;
+  border: 1.5px dashed;
+  border-radius: 5px;
+}
+/* Resize */
+.vue-resizable-handle {
+  display: none;
+}
+.vue-grid-item:hover .vue-resizable-handle {
+  display: block;
+}
+/* Move */
+.vue-draggable-handle {
+  display: none;
+}
+.vue-grid-item:hover .vue-draggable-handle {
+  cursor: pointer;
+  display: block;
 }
 </style>
