@@ -9,6 +9,9 @@
     >
       <img :src="image" class="max-h-full" />
     </div>
+    <div>
+      <input type="file" name="custom-image" ref="preview" v-on:change="show" />
+    </div>
   </div>
 </template>
 
@@ -38,6 +41,12 @@ export default {
     },
     setStatus(value) {
       this.isRunning = value;
+    },
+    show() {
+      const file = this.$refs.preview.files[0];
+      const url = URL.createObjectURL(file);
+      this.$set(this.images, 3, url);
+      this.changeImage(3);
     },
   },
   computed: {
