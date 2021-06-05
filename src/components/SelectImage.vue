@@ -22,6 +22,7 @@
       >Upload
       <input
         type="file"
+        accept="image/jpeg, image/png"
         name="custom-image"
         ref="preview"
         v-on:change="onSelect"
@@ -65,9 +66,13 @@ export default {
       this.show(event.dataTransfer.files[0]);
     },
     show(file) {
-      const url = URL.createObjectURL(file);
-      this.$set(this.images, 3, url);
-      this.changeImage(3);
+      if (file) {
+        if (file.type.indexOf("image/") >= 0) {
+          const url = URL.createObjectURL(file);
+          this.$set(this.images, 3, url);
+          this.changeImage(3);
+        }
+      }
     },
   },
   computed: {
