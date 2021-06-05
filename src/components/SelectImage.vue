@@ -9,9 +9,24 @@
     >
       <img :src="image" class="max-h-full" />
     </div>
-    <div>
-      <input type="file" name="custom-image" ref="preview" v-on:change="show" />
-    </div>
+    <label
+      class="mx-auto flex items-center border-dotted border-4
+              m-2 px-4 cursor-pointer"
+      :class="onMouse ? 'border-blue-700 bg-blue-200' : 'border-gray-500'"
+      @mouseover="onMouse = true"
+      @mouseleave="onMouse = false"
+      @dragenter="onMouse = true"
+      @dragleave="onMouse = false"
+      @dragover.prevent
+      @drop.prevent="onDrop"
+      >Upload
+      <input
+        type="file"
+        name="custom-image"
+        ref="preview"
+        v-on:change="onSelect"
+      />
+    </label>
   </div>
 </template>
 
@@ -30,6 +45,7 @@ export default {
         require("@/assets/img/default3.jpg"),
       ],
       select: 0,
+      onMouse: false,
     };
   },
   methods: {
@@ -42,8 +58,13 @@ export default {
     setStatus(value) {
       this.isRunning = value;
     },
-    show() {
-      const file = this.$refs.preview.files[0];
+    onSelect() {
+      this.show(this.$refs.preview.files[0]);
+    },
+    onDrop() {
+      this.show(event.dataTransfer.files[0]);
+    },
+    show(file) {
       const url = URL.createObjectURL(file);
       this.$set(this.images, 3, url);
       this.changeImage(3);
@@ -62,5 +83,8 @@ export default {
 <style scoped>
 .select img {
   border: solid 3px red;
+}
+input {
+  display: none;
 }
 </style>
