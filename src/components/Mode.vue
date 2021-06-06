@@ -23,6 +23,7 @@
         v-model="custom.cols"
         placeholder="4"
         :disabled="status === 'running'"
+        @change="changeCustomSetting"
       />
       <input
         class="shadow border rounded my-1 py-2 px-2 focus:outline-none"
@@ -31,6 +32,7 @@
         v-model="custom.rows"
         placeholder="4"
         :disabled="status === 'running'"
+        @change="changeCustomSetting"
       />
       <input
         class="shadow border rounded my-1 py-2 px-2 focus:outline-none"
@@ -39,6 +41,7 @@
         v-model="custom.divs"
         placeholder="4"
         :disabled="status === 'running'"
+        @change="changeCustomSetting"
       />
     </div>
     <div
@@ -103,6 +106,12 @@ export default {
         this.rows = this.custom.rows;
         this.divs = this.custom.divs;
       }
+    },
+    changeCustomSetting() {
+      if (this.custom.cols < 1) this.custom.cols = 1;
+      if (this.custom.rows < 1) this.custom.rows = 1;
+      const maxDivs = this.custom.cols * this.custom.rows;
+      if (this.custom.divs > maxDivs) this.custom.divs = maxDivs;
     },
     isSelectedMode(mode) {
       if (mode === this.mode) {
