@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="container mx-auto">
-    <div id="content" class="container max-auto">
+    <div id="content" class="container mx-auto">
       <h1 class="text-3xl">Grid Puzzle</h1>
       <select-image ref="select" @select="select" />
       <div class="grid grid-cols-3">
